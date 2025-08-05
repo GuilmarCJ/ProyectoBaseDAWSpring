@@ -26,7 +26,7 @@ public class MaterialController {
         filtros.put("almacenes", almacenes);
         return filtros;
     }
-
+    //Entiendelo calvo y me explicas
     // Endpoint para filtrar datos por Local y Tipo
     @PostMapping("/filtrar")
     public List<MaterialDef> filtrarMateriales(@RequestBody Map<String, String> filtros) {
