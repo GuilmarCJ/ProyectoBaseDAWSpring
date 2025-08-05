@@ -19,11 +19,11 @@ public class MaterialController {
     @GetMapping("/filtros")
     public Map<String, List<String>> obtenerFiltros() {
         List<String> locales = materialDefRepository.findDistinctLocales();
-        List<String> tipos = materialDefRepository.findDistinctTipos();
+        List<String> almacenes = materialDefRepository.findDistinctAlmacenes();
 
         Map<String, List<String>> filtros = new HashMap<>();
         filtros.put("locales", locales);
-        filtros.put("tipos", tipos);
+        filtros.put("almacenes", almacenes);
         return filtros;
     }
 
@@ -31,7 +31,7 @@ public class MaterialController {
     @PostMapping("/filtrar")
     public List<MaterialDef> filtrarMateriales(@RequestBody Map<String, String> filtros) {
         String local = filtros.get("local");
-        String tipo = filtros.get("tipo");
-        return materialDefRepository.findByLocalAndTipo(local, tipo);
+        String almacen = filtros.get("almacen");
+        return materialDefRepository.findByLocalAndAlmacen(local, almacen);
     }
 }

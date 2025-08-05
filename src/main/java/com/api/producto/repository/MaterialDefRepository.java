@@ -14,9 +14,7 @@ public interface MaterialDefRepository extends JpaRepository<MaterialDef, Intege
     List<String> findDistinctLocales();
 
     // Obtener Tipos únicos
-    @Query("SELECT DISTINCT m.tipo FROM MaterialDef m")
-    List<String> findDistinctTipos();
+    @Query("SELECT DISTINCT m.almacen FROM MaterialDef m")
+    List<String> findDistinctAlmacenes();
 
-    // Buscar por Local y Tipo
-    List<MaterialDef> findByLocalAndTipo(String local, String tipo);
 }
