@@ -9,17 +9,27 @@ public class LoginResponse {
     private String local;
     private String almacen;
     private List<MaterialDef> materiales;
+    private String token;
     
     // Constructor
-    public LoginResponse(String mensaje, String nombreCompleto, String local, String almacen, List<MaterialDef> materiales) {
+    public LoginResponse(String mensaje, String nombreCompleto, String local, String almacen, List<MaterialDef> materiales, String token) {
         this.mensaje = mensaje;
         this.nombreCompleto = nombreCompleto;
         this.local = local;
         this.almacen = almacen;
         this.materiales = materiales;
+        this.token = token;
     }
     
     // Getters y Setters
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+    
     public String getMensaje() {
         return mensaje;
     }
