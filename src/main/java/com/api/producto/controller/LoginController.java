@@ -11,8 +11,12 @@
 	
 	import com.api.producto.entity.Usuario;
 	import com.api.producto.repository.UsuarioRepository;
-	
+	import com.api.producto.security.JwtUtil;
 	import com.api.producto.dto.LoginResponse;
+	
+	import org.springframework.http.HttpStatus;
+	import org.springframework.http.ResponseEntity;
+
 
 	import com.api.producto.entity.MaterialDef;
 
@@ -32,9 +36,12 @@
 	    
 	    @Autowired
 	    private MaterialDefRepository materialDefRepository;
+	    
+	    @Autowired
+	    private JwtUtil jwtUtil;
 
 	    @PostMapping("/login")
-	    public LoginResponse login(@RequestBody Usuario loginData) {
+	    public ResponseEntity<?> login(@RequestBody Usuario loginData) {
 	        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsernameAndPassword(
 	                loginData.getUsername(), 
 	                loginData.getPassword()
@@ -42,25 +49,24 @@
 
 	        if (usuarioOpt.isPresent()) {
 	            Usuario usuario = usuarioOpt.get();
+	            String token = jwtUtil.generateToken(usuario.getUsername());
+
 	            List<MaterialDef> materiales = materialDefRepository.findByLocalAndAlmacen(
-	                usuario.getLocal(), 
-	                usuario.getAlmacen()
+	                    usuario.getLocal(),
+	                    usuario.getAlmacen()
 	            );
-	            
-	            return new LoginResponse(
+
+	            return ResponseEntity.ok(new LoginResponse(
 	                "Login correcto",
 	                usuario.getNombre_completo(),
 	                usuario.getLocal(),
 	                usuario.getAlmacen(),
-	                materiales
-	            );
+	                materiales,
+	                token // <-- NUEVO
+	            ));
 	        } else {
-	            return new LoginResponse(
-	                "Usuario o contraseña incorrectos",
-	                null,
-	                null,
-	                null,
-	                null
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+	                new LoginResponse("Usuario o contraseña incorrectos", null, null, null, null, null)
 	            );
 	        }
 	    }
