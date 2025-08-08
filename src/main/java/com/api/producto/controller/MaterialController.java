@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.api.producto.entity.MaterialDef;
+import com.api.producto.entity.Usuario;
 import com.api.producto.repository.MaterialDefRepository;
+import com.api.producto.repository.UsuarioRepository;
 
 @RestController
 @RequestMapping("/api/materiales")
@@ -14,6 +16,8 @@ public class MaterialController {
 
     @Autowired
     private MaterialDefRepository materialDefRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepo;
 
     // Endpoint para obtener listas únicas de Local y Tipo
     @GetMapping("/filtros")
@@ -33,5 +37,17 @@ public class MaterialController {
         String local = filtros.get("local");
         String almacen = filtros.get("almacen");
         return materialDefRepository.findByLocalAndAlmacen(local, almacen);
+    }
+    
+    @GetMapping("/ver")
+    public List<MaterialDef> verMateriales(@RequestParam String username) {
+        Usuario u = usuarioRepo.findByUsername(username).orElse(null);
+        if (u == null) return List.of();
+
+        if ("ADMINISTRADOR".equals(u.getRol())) {
+            return materialDefRepository.findAll();
+        } else {
+            return materialDefRepository.findByLocalAndAlmacen(u.getLocal(), u.getAlmacen());
+        }
     }
 }

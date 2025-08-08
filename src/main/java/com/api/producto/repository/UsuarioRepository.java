@@ -8,4 +8,5 @@ import com.api.producto.entity.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     Optional<Usuario> findByUsernameAndPassword(String username, String password);
+    Optional<Usuario> findByUsername(String username);
 }
