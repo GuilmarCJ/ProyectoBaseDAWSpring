@@ -3,8 +3,11 @@ package com.api.producto.repository;
 import com.api.producto.entity.MaterialDef;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
+@Repository
 public interface MaterialDefRepository extends JpaRepository<MaterialDef, Integer> {
     @Query("SELECT m FROM MaterialDef m WHERE m.local = :local AND m.almacen = :almacen")
     List<MaterialDef> findByLocalAndAlmacen(String local, String almacen);
@@ -17,4 +20,6 @@ public interface MaterialDefRepository extends JpaRepository<MaterialDef, Intege
     @Query("SELECT DISTINCT m.almacen FROM MaterialDef m")
     List<String> findDistinctAlmacenes();
 
+    List<MaterialDef> findByLocalAndAlmacenAndUsuario(String local, String almacen, String usuario);
+    
 }
